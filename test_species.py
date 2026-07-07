@@ -7,18 +7,24 @@ g = GlassGenerator(
     seed=12345,
 )
 
-species = g.make_species_list()
+print("Species list sizes")
+print("------------------")
+
+print("Si =", len(g.species_lists["Si"]))
+print("Ca =", len(g.species_lists["Ca"]))
+print("O  =", len(g.species_lists["O"]))
 
 print()
 
-print("Total species :", len(species))
-
-print("Si =", species.count("Si"))
-print("O  =", species.count("O"))
-print("Ca =", species.count("Ca"))
+print("First 10 Si atoms:")
+print(g.species_lists["Si"][:10])
 
 print()
 
-print("First 20 atoms:")
+print("First 10 Ca atoms:")
+print(g.species_lists["Ca"][:10])
 
-print(species[:20])
+print()
+
+print("First 10 O atoms:")
+print(g.species_lists["O"][:10])
