@@ -7,11 +7,14 @@ for x(CaO)–(1-x)SiO2 glasses.
 
 import numpy as np
 
+MAX_ATTEMPTS = 10000
+
 from composition import calculate_composition
 from configuration import GlassConfiguration
 from celllist import NeighborGrid
-from geometry import distance_squared
+from geometry import random_position, distance_squared
 from constants import cutoff
+
 
 class GlassGenerator:
     """
@@ -91,10 +94,10 @@ class GlassGenerator:
         Parameters
         ----------
         species : str
-        Species to insert ("Si", "Ca", or "O").
+            Species to insert ("Si", "Ca", or "O").
 
         position : numpy.ndarray
-        Trial Cartesian coordinates.
+            Trial Cartesian coordinates.
 
         Returns
         -------
@@ -126,3 +129,69 @@ class GlassGenerator:
                 return False
 
         return True
+
+    def insert_atom(self, species, position):
+        """
+        Insert one atom into the configuration.
+        """
+
+        self.cfg.add_atom(species, position)
+
+        atom_id = self.cfg.natoms - 1
+
+        self.grid.add_atom(
+            atom_id,
+            position,
+        )
+
+    def try_insert(self, species):
+        """
+        Attempt to insert one atom of the given species.
+
+        Returns
+        -------
+        bool
+            True if the insertion succeeded, False otherwise.
+        """
+
+        position = random_position(
+            self.box,
+            self.rng,
+        )
+
+        if not self.check_position(species, position):
+            return False
+
+        self.insert_atom(species, position)
+
+        return True
+
+    def place_species(self, species):
+        """
+        Place all atoms of one species using Random Sequential Addition.
+        """
+
+        n_atoms = len(self.species_lists[species])
+
+        print(f"Placing {n_atoms} {species} atoms...")
+
+        for i in range(n_atoms):
+
+            success = False
+
+            for attempt in range(MAX_ATTEMPTS):
+
+                if self.try_insert(species):
+                    success = True
+                    break
+
+            if not success:
+                raise RuntimeError(
+                    f"Unable to place {species} atom {i + 1}/{n_atoms} "
+                    f"after {MAX_ATTEMPTS} attempts."
+                )
+
+            if (i + 1) % 100 == 0 or (i + 1) == n_atoms:
+                print(f"  {species}: {i + 1}/{n_atoms}")
+
+        print(f"{species} placement completed.\n")

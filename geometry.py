@@ -11,10 +11,12 @@ def random_position(box_length, rng):
     """
     Generate a random position inside a cubic box.
 
+
     Parameters
     ----------
     box_length : float
         Box length in Å.
+
     rng : numpy.random.Generator
         Random number generator.
 
