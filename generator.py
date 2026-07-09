@@ -195,3 +195,22 @@ class GlassGenerator:
                 print(f"  {species}: {i + 1}/{n_atoms}")
 
         print(f"{species} placement completed.\n")
+
+    def generate(self):
+        """
+        Generate a complete RSA configuration.
+        """
+
+        print("=" * 60)
+        print("Starting RSA generation")
+        print("=" * 60)
+
+        self.place_species("Si")
+        self.place_species("Ca")
+        self.place_species("O")
+
+        print("=" * 60)
+        print("Generation finished")
+        print("=" * 60)
+
+        return self.cfg
