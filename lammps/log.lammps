@@ -1,0 +1,242 @@
+LAMMPS (29 Aug 2024)
+#======================================================================
+# 01_minimize.in
+#
+# First energy minimization of CaO-SiO2 glass
+#
+# Force field:
+#   Pedone et al. (2006)
+#
+# LAMMPS:
+#   29 Aug 2024
+#======================================================================
+
+clear
+
+units           metal
+dimension       3
+boundary        p p p
+
+atom_style      charge
+
+#-----------------------------
+# Read structure
+#-----------------------------
+
+read_data       data/glass_54.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (10.924184 10.924184 10.924184)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  54 atoms
+  read_data CPU = 0.002 seconds
+
+#-----------------------------
+# Force field
+#-----------------------------
+
+include         forcefields/pedone_2006.in
+#======================================================================
+# Pedone et al. (2006) PMMCS Force Field
+#
+# Reference:
+# A. Pedone, G. Malavasi, M. C. Menziani,
+# A. N. Cormack, U. Segre,
+# J. Phys. Chem. B 110, 11780–11795 (2006)
+#
+# LAMMPS:
+# pair_style pedone (29 Aug 2024)
+#
+# Units:
+# units metal
+#
+# Atom types:
+#   1 = Si
+#   2 = O
+#   3 = Ca
+#
+# Charges:
+#   Si  +2.4
+#   O   -1.2
+#   Ca  +1.2
+#======================================================================
+
+pair_style hybrid/overlay pedone 15.0 coul/long 15.0
+
+kspace_style pppm 1.0e-5
+
+#--------------------------------------------------
+# Coulomb interaction
+#--------------------------------------------------
+
+pair_coeff * * coul/long
+
+#--------------------------------------------------
+# Pedone short-range interactions
+#
+# pair_coeff i j pedone
+#            D0 alpha r0 B0
+#--------------------------------------------------
+
+# Si-O
+pair_coeff 1 2 pedone 0.340554 2.006700 2.100000 1.0
+
+# O-O
+pair_coeff 2 2 pedone 0.042395 1.379316 3.618701 22.0
+
+# Ca-O
+pair_coeff 2 3 pedone 0.030211 2.241334 2.923245 5.0
+
+#-----------------------------
+# Neighbor list
+#-----------------------------
+
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+
+#-----------------------------
+# Thermodynamic output
+#-----------------------------
+
+thermo          50
+
+thermo_style custom step pe etotal temp press vol lx ly lz
+
+#-----------------------------
+# Energy minimization settings
+#-----------------------------
+
+reset_timestep  0
+
+min_style       cg
+
+min_modify      dmax 0.10
+
+minimize        1.0e-8 1.0e-8 5000 50000
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- Type Label Framework: https://doi.org/10.1021/acs.jpcb.3c08419
+
+@Article{Gissinger24,
+ author = {Jacob R. Gissinger, Ilia Nikiforov, Yaser Afshar, Brendon Waters, Moon-ki Choi, Daniel S. Karls, Alexander Stukowski, Wonpil Im, Hendrik Heinz, Axel Kohlmeyer, and Ellad B. Tadmor},
+ title = {Type Label Framework for Bonded Force Fields in LAMMPS},
+ journal = {J. Phys. Chem. B},
+ year =    2024,
+ volume =  128,
+ number =  13,
+ pages =   {3282–-3297}
+}
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb (../kspace.cpp:342)
+  G vector (1/distance) = 0.2197459
+  grid = 9 9 9
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.00010428792
+  estimated relative force accuracy = 7.242395e-06
+  using double precision KISS FFT
+  3d grid and FFT values/proc = 4096 729
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 17
+  ghost atom cutoff = 17
+  binsize = 8.5, bins = 2 2 2
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair pedone, perpetual, skip from (2)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair coul/long, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 5.611 | 5.611 | 5.611 Mbytes
+   Step         PotEng         TotEng          Temp          Press          Volume           Lx             Ly             Lz      
+         0  -490.8079      -490.8079       0             -123002.34      1303.668       10.924184      10.924184      10.924184    
+        50  -795.5238      -795.5238       0             -32399.368      1303.668       10.924184      10.924184      10.924184    
+       100  -814.81941     -814.81941      0             -28616.795      1303.668       10.924184      10.924184      10.924184    
+       150  -816.46077     -816.46077      0             -30270.476      1303.668       10.924184      10.924184      10.924184    
+       200  -817.64041     -817.64041      0             -32326.018      1303.668       10.924184      10.924184      10.924184    
+       223  -817.64334     -817.64334      0             -32135.448      1303.668       10.924184      10.924184      10.924184    
+Loop time of 0.431245 on 1 procs for 223 steps with 54 atoms
+
+100.0% CPU use with 1 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+     -490.807902630456  -817.643337290094  -817.643342878342
+  Force two-norm initial, final = 78.306993 0.020543307
+  Force max component initial, final = 16.103272 0.006809136
+  Final line search alpha, max atom move = 1 0.006809136
+  Iterations, force evaluations = 223 380
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.36467    | 0.36467    | 0.36467    |   0.0 | 84.56
+Kspace  | 0.05096    | 0.05096    | 0.05096    |   0.0 | 11.82
+Neigh   | 0.0071389  | 0.0071389  | 0.0071389  |   0.0 |  1.66
+Comm    | 0.0065657  | 0.0065657  | 0.0065657  |   0.0 |  1.52
+Output  | 0.0002213  | 0.0002213  | 0.0002213  |   0.0 |  0.05
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.001692   |            |       |  0.39
+
+Nlocal:             54 ave          54 max          54 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           3678 ave        3678 max        3678 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:          23149 ave       23149 max       23149 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 23149
+Ave neighs/atom = 428.68519
+Neighbor list builds = 12
+Dangerous builds = 0
+
+#-----------------------------
+# Output
+#-----------------------------
+
+write_data      data/glass_54_minimized.data
+System init for write_data ...
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb (../kspace.cpp:342)
+  G vector (1/distance) = 0.2197459
+  grid = 9 9 9
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.00010428792
+  estimated relative force accuracy = 7.242395e-06
+  using double precision KISS FFT
+  3d grid and FFT values/proc = 4096 729
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+
+write_restart   restart/glass_54_minimized.restart
+System init for write_restart ...
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb (../kspace.cpp:342)
+  G vector (1/distance) = 0.2197459
+  grid = 9 9 9
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.00010428792
+  estimated relative force accuracy = 7.242395e-06
+  using double precision KISS FFT
+  3d grid and FFT values/proc = 4096 729
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+
+print "===================================================="
+====================================================
+print " Minimization completed successfully."
+ Minimization completed successfully.
+print "===================================================="
+====================================================
+Total wall time: 0:00:00

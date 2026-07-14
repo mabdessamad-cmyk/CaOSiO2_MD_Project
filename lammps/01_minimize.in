@@ -1,0 +1,70 @@
+#======================================================================
+# 01_minimize.in
+#
+# First energy minimization of CaO-SiO2 glass
+#
+# Force field:
+#   Pedone et al. (2006)
+#
+# LAMMPS:
+#   29 Aug 2024
+#======================================================================
+
+clear
+
+units           metal
+dimension       3
+boundary        p p p
+
+atom_style      charge
+
+#-----------------------------
+# Read structure
+#-----------------------------
+
+read_data       data/glass_54.data
+
+#-----------------------------
+# Force field
+#-----------------------------
+
+include         forcefields/pedone_2006.in
+
+#-----------------------------
+# Neighbor list
+#-----------------------------
+
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+
+#-----------------------------
+# Thermodynamic output
+#-----------------------------
+
+thermo          50
+
+thermo_style custom step pe etotal temp press vol lx ly lz
+
+#-----------------------------
+# Energy minimization settings
+#-----------------------------
+
+reset_timestep  0
+
+min_style       cg
+
+min_modify      dmax 0.10
+
+minimize        1.0e-8 1.0e-8 5000 50000
+
+#-----------------------------
+# Output
+#-----------------------------
+
+write_data      data/glass_54_minimized.data
+
+write_restart   restart/glass_54_minimized.restart
+
+print "===================================================="
+print " Minimization completed successfully."
+print "===================================================="
