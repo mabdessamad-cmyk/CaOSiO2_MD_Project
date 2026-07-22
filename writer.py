@@ -43,9 +43,9 @@ def write_header(file, cfg):
     file.write(f"{cfg.natoms} atoms\n")
     file.write(f"{len(ATOM_TYPES)} atom types\n\n")
 
-    file.write(f"0.0 {cfg.box:.6f} xlo xhi\n")
-    file.write(f"0.0 {cfg.box:.6f} ylo yhi\n")
-    file.write(f"0.0 {cfg.box:.6f} zlo zhi\n\n")
+    file.write(f"0.0 {cfg.box_length:.6f} xlo xhi\n")
+    file.write(f"0.0 {cfg.box_length:.6f} ylo yhi\n")
+    file.write(f"0.0 {cfg.box_length:.6f} zlo zhi\n\n")
 
 def write_masses(file):
     """

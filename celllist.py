@@ -6,6 +6,7 @@ Simple neighbor-grid (cell list) for periodic cubic boxes.
 
 import numpy as np
 
+from geometry import distance_squared
 
 class NeighborGrid:
     """
@@ -69,5 +70,38 @@ class NeighborGrid:
 
                     if key in self.grid:
                         neigh.extend(self.grid[key])
-
         return neigh
+
+    def can_insert(self, species, position, cutoff=3.0):
+        """
+        Return True if the new atom is at least cutoff Å away
+        from all nearby atoms.
+        """
+
+        cutoff2 = cutoff * cutoff
+
+        for atom_id in self.nearby_atoms(position):
+
+            other = self.positions[atom_id]
+
+            if distance_squared(position, other, self.box) < cutoff2:
+                return False
+
+        return True
+
+
+    def insert(self, species, position):
+        """
+        Insert a newly accepted atom.
+        """
+
+        if not hasattr(self, "positions"):
+            self.positions = []
+
+        atom_id = len(self.positions)
+
+        self.positions.append(position.copy())
+
+        self.add_atom(atom_id, position)
+
+

@@ -1,0 +1,96 @@
+#======================================================================
+# 02_npt_300K.in
+#
+# CaO–SiO2 glass
+# NPT relaxation at 300 K
+#
+# Starting structure:
+#   glass_54_minimized.data
+#
+# Force field:
+#   Pedone et al. (2006)
+#======================================================================
+
+clear
+
+units           metal
+dimension       3
+boundary        p p p
+atom_style      charge
+
+#--------------------------------------------------
+# Read minimized structure
+#--------------------------------------------------
+
+read_data       data/glass_54_minimized.data nocoeff
+
+reset_timestep  0
+
+#--------------------------------------------------
+# Force field
+#--------------------------------------------------
+
+include         forcefields/pedone_2006.in
+
+#--------------------------------------------------
+# Neighbor list
+#--------------------------------------------------
+
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+
+#--------------------------------------------------
+# Time integration
+#--------------------------------------------------
+
+timestep        0.001      # 1 fs
+
+velocity        all create 300.0 12345 mom yes rot yes dist gaussian
+
+#--------------------------------------------------
+# NPT ensemble
+#--------------------------------------------------
+
+fix             1 all npt temp 300.0 300.0 0.1 iso 0.0 0.0 1.0
+
+#--------------------------------------------------
+# Thermodynamic output
+#--------------------------------------------------
+
+thermo          100
+
+thermo_style custom step temp pe ke etotal press density vol lx ly lz
+
+thermo_modify   flush yes
+
+#--------------------------------------------------
+# Trajectory output
+#--------------------------------------------------
+
+dump            1 all custom 500 dump/npt_300K.lammpstrj id type q x y z
+
+dump_modify     1 sort id
+
+#--------------------------------------------------
+# Restart files
+#--------------------------------------------------
+
+restart         10000 restart/npt_300K.*
+
+#--------------------------------------------------
+# Run
+#--------------------------------------------------
+
+run             20000
+
+#--------------------------------------------------
+# Output
+#--------------------------------------------------
+
+write_data      data/glass_54_npt300.data
+
+write_restart   restart/glass_54_npt300.restart
+
+print "=========================================="
+print " NPT relaxation completed successfully."
+print "=========================================="
