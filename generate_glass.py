@@ -20,6 +20,15 @@ from composition import calculate_composition
 from geometry import random_position, distance
 from celllist import NeighborGrid
 from validate import validate_composition, validate_distances
+from topology import (
+    find_si_neighbors,
+    connect_tetrahedra,
+    validate_coordination,
+    complete_tetrahedra,
+    merge_oxygens,
+    classify_oxygens,
+    check_neighbor_symmetry,
+)
 
 SIO_BOND = 1.62  # Å
 
@@ -262,7 +271,7 @@ class GlassGenerator:
 
         print("Building Si network...")
 
-        cutoff = 4.2
+        cutoff = 5.0
         max_neighbors = 4
 
         nsi = len(self.si_indices)
@@ -271,57 +280,143 @@ class GlassGenerator:
         for i in range(nsi):
             self.si_neighbors[i] = []
 
-    # ==========================================================
-    # STEP 1: Collect all candidate Si-Si pairs
-    # ==========================================================
+        si_positions = [
+            self.cfg.get_position(i)
+            for i in self.si_indices
+        ]
 
-        pairs = []
+        neighbors = find_si_neighbors(
+            si_positions,
+            self.box,
+            cutoff=5.0
+        )
 
-        for i in range(nsi - 1):
+        self.si_neighbors = neighbors
 
-            pos_i = self.cfg.get_position(i)
+        for i in range(10):
+            print(f"Si {i}: {neighbors[i]}")
 
-            for j in range(i + 1, nsi):
+        bad = check_neighbor_symmetry(neighbors)
+        print(f"Asymmetric links : {bad}")
 
-                pos_j = self.cfg.get_position(j)
+        counts = [len(n) for n in neighbors]
 
-                d = distance(pos_i, pos_j, self.box)
+        print()
+        print("Neighbor statistics")
+        print("--------------------------")
+        print(f"Average neighbors : {sum(counts)/len(counts):.2f}")
+        print(f"Minimum neighbors : {min(counts)}")
+        print(f"Maximum neighbors : {max(counts)}")
 
-                if d < cutoff:
-                    pairs.append((d, i, j))
+        target_nbo = 2 * self.comp["Ca"]
+        target_bo = self.comp["O"] - target_nbo
 
-    # ==========================================================
-    # STEP 2: Sort by distance
-    # ==========================================================
+        oxygen_positions, oxygen_owners = connect_tetrahedra(
+            si_positions,
+            neighbors,
+            self.box,
+            target_bo=target_bo
+        )
 
-        pairs.sort()
+        coordination = validate_coordination(
+        oxygen_owners,
+        len(si_positions)
+        )
 
-    # ==========================================================
-    # STEP 3: Build the network
-    # ==========================================================
+        print()
+        print("Coordination before completion")
+        print("-----------------------------")
+        print(f"Average : {sum(coordination)/len(coordination):.2f}")
+        print(f"Minimum : {min(coordination)}")
+        print(f"Maximum : {max(coordination)}")
 
-        for d, i, j in pairs:
+        oxygen_positions, oxygen_owners = complete_tetrahedra(
+        si_positions,
+        oxygen_positions,
+        oxygen_owners,
+        coordination
+        )
 
-            if len(self.si_neighbors[i]) >= max_neighbors:
-                continue
+        print()
+        print("Before merging")
+        print("--------------------------")
+        print(f"Total oxygens : {len(oxygen_positions)}")
 
-            if len(self.si_neighbors[j]) >= max_neighbors:
-                continue
+        bo_before = sum(1 for x in oxygen_owners if len(x) == 2)
+        nbo_before = sum(1 for x in oxygen_owners if len(x) == 1)
 
-            self.si_neighbors[i].append(j)
-            self.si_neighbors[j].append(i)
+        print(f"BO  : {bo_before}")
+        print(f"NBO : {nbo_before}")
 
-        print("Si network completed.")
+        coordination = validate_coordination(
+        oxygen_owners,
+        len(si_positions)
+        )
+
+        print()
+        print("Coordination after completion")
+        print("----------------------------")
+        print(f"Average : {sum(coordination)/len(coordination):.2f}")
+        print(f"Minimum : {min(coordination)}")
+        print(f"Maximum : {max(coordination)}")
+
+        merged_oxygens = oxygen_positions
+        owners = oxygen_owners
+
+        self.oxygen_positions = merged_oxygens
+        self.oxygen_owners = owners
+
+        bo, nbo = classify_oxygens(owners)
+
+        print()
+        print("Topology statistics")
+        print("--------------------------")
+        print(f"Temporary oxygens : {len(oxygen_positions)}")
+        print(f"Merged oxygens    : {len(merged_oxygens)}")
+        print(f"BO                : {bo}")
+        print(f"NBO               : {nbo}")
+
+    def analyze_si_o_distances(self):
+
+        from geometry import distance
+
+        bo = []
+        nbo = []
+
+        for k, owners in enumerate(self.oxygen_owners):
+
+            o = self.oxygen_positions[k]
+
+            if len(owners) == 2:
+
+                for si in owners:
+                    d = distance(
+                        self.cfg.get_position(self.si_indices[si]),
+                        o,
+                        self.box
+                    )
+                    bo.append(d)
+
+            else:
+
+                si = owners[0]
+
+                d = distance(
+                    self.cfg.get_position(self.si_indices[si]),
+                    o,
+                    self.box
+                )
+                nbo.append(d)
+
+        print()
+        print("Si-O distance analysis")
+        print("--------------------------")
+        print(f"BO : min={min(bo):.3f}  avg={sum(bo)/len(bo):.3f}")
+        print(f"NBO: min={min(nbo):.3f}  avg={sum(nbo)/len(nbo):.3f}")
 
     # ==========================================================
     # Validation
     # ==========================================================
-
-        counts = [len(v) for v in self.si_neighbors.values()]
-
-        print(f"Average neighbors : {sum(counts)/len(counts):.2f}")
-        print(f"Minimum neighbors : {min(counts)}")
-        print(f"Maximum neighbors : {max(counts)}")
 
     def place_oxygen(self):
         """
@@ -390,6 +485,7 @@ class GlassGenerator:
         self.place_atoms()
         self.build_si_network()
         self.place_oxygen()
+        self.analyze_si_o_distances()
         self.place_calcium()
 
         return self.cfg

@@ -14,11 +14,22 @@ oxygen_positions = [
 
 ]
 
-merged, mapping = merge_oxygens(oxygen_positions)
+oxygen_owner = [
+    0,  # O1 belongs to Si 0
+    1,  # O2 belongs to Si 1 (will merge with O1)
+    2,  # O3 belongs to Si 2
+    3,  # O4 belongs to Si 3 (will merge with O3)
+    4   # O5 belongs to Si 4
+]
+
+merged, mapping, owners = merge_oxygens(
+    oxygen_positions,
+    oxygen_owner
+)
 
 print("Original :", len(oxygen_positions))
 print("Merged   :", len(merged))
 print("Mapping  :", mapping)
-
+print("Owners   :", owners)
 for p in merged:
     print(p)
