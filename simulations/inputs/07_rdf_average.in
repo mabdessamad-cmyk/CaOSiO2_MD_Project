@@ -1,0 +1,52 @@
+# ==========================================================
+# 07_rdf_average.in
+# RDF averaged at 300 K
+# ==========================================================
+
+units           metal
+dimension       3
+boundary        p p p
+atom_style      charge
+
+read_data       glass_final_300K.data
+
+# ----------------------------------------------------------
+# Pedone force field
+# ----------------------------------------------------------
+
+pair_style hybrid/overlay pedone 15.0 coul/long 15.0
+
+kspace_style pppm 1.0e-6
+
+pair_coeff * * coul/long
+
+pair_coeff 1 2 pedone 0.340554 2.006700 2.100000 1.0
+pair_coeff 2 2 pedone 0.042395 2.047400 3.600000 22.0
+pair_coeff 2 3 pedone 0.100261 2.765800 3.300000 5.0
+
+pair_modify mix geometric
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+# ----------------------------------------------------------
+# Short NVT averaging run
+# ----------------------------------------------------------
+
+velocity all create 300.0 987654 mom yes rot yes dist gaussian
+
+fix nvt all nvt temp 300.0 300.0 0.1
+
+compute rdfall all rdf 300
+
+fix rdfavg all ave/time 100 100 10000 c_rdfall[*] mode vector file rdf_average.dat
+
+thermo 1000
+thermo_style custom step temp pe press
+
+timestep 0.001
+
+run 20000
+
+unfix rdfavg
+unfix nvt

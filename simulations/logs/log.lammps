@@ -1,0 +1,155 @@
+LAMMPS (29 Aug 2024)
+# ==========================================================
+# Coordination numbers
+# ==========================================================
+
+units           metal
+dimension       3
+boundary        p p p
+atom_style      charge
+
+read_data       glass_final_300K.data
+Reading data file ...
+  orthogonal box = (4.8951235 4.8951235 4.8951235) to (48.987588 48.987588 48.987588)
+  1 by 2 by 2 MPI processor grid
+  reading atoms ...
+  6480 atoms
+  reading velocities ...
+  6480 velocities
+  read_data CPU = 0.046 seconds
+
+# ---------------- Force field ----------------
+
+pair_style hybrid/overlay pedone 15.0 coul/long 15.0
+kspace_style pppm 1.0e-6
+
+pair_coeff * * coul/long
+
+pair_coeff 1 2 pedone 0.340554 2.006700 2.100000 1.0
+pair_coeff 2 2 pedone 0.042395 2.047400 3.600000 22.0
+pair_coeff 2 3 pedone 0.100261 2.765800 3.300000 5.0
+
+pair_modify mix geometric
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+# ---------------- Short averaging ----------------
+
+velocity all create 300.0 12345 mom yes rot yes dist gaussian
+
+fix nvt all nvt temp 300.0 300.0 0.1
+
+# ---------------- Coordination ----------------
+
+compute SiO all coord/atom cutoff 2.325 2
+compute CaO all coord/atom cutoff 3.00 2
+
+dump coord all custom 10000 coordination.dump id type c_SiO c_CaO
+
+thermo 1000
+thermo_style custom step temp pe press
+
+run 10000
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- Type Label Framework: https://doi.org/10.1021/acs.jpcb.3c08419
+
+@Article{Gissinger24,
+ author = {Jacob R. Gissinger, Ilia Nikiforov, Yaser Afshar, Brendon Waters, Moon-ki Choi, Daniel S. Karls, Alexander Stukowski, Wonpil Im, Hendrik Heinz, Axel Kohlmeyer, and Ellad B. Tadmor},
+ title = {Type Label Framework for Bonded Force Fields in LAMMPS},
+ journal = {J. Phys. Chem. B},
+ year =    2024,
+ volume =  128,
+ number =  13,
+ pages =   {3282–-3297}
+}
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb (../kspace.cpp:342)
+  G vector (1/distance) = 0.2408615
+  grid = 60 60 60
+  stencil order = 5
+  estimated absolute RMS force accuracy = 1.626129e-05
+  estimated relative force accuracy = 1.1292841e-06
+  using double precision KISS FFT
+  3d grid and FFT values/proc = 91723 54000
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 17
+  ghost atom cutoff = 17
+  binsize = 8.5, bins = 6 6 6
+  4 neighbor lists, perpetual/occasional/extra = 2 2 0
+  (1) pair pedone, perpetual, skip from (2)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair coul/long, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+  (3) compute coord/atom, occasional
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+  (4) compute coord/atom, occasional
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 25.88 | 26.17 | 26.65 Mbytes
+   Step          Temp          PotEng         Press     
+         0   300           -36010.129      5536074.3    
+      1000   280.20555     -85526.16       885593.36    
+      2000   310.78455     -85715.381      879828.4     
+      3000   290.32667     -85796.822      878514.59    
+      4000   298.32563     -85833.936      877062.7     
+      5000   308.00571     -85840.369      877976.28    
+      6000   290.67114     -85865.906      876058.23    
+      7000   310.79445     -85857.21       875050.58    
+      8000   288.204       -85888.397      874437.59    
+      9000   309.56252     -85882.859      876711.48    
+     10000   296.89246     -85884.688      875633.95    
+Loop time of 1239.89 on 4 procs for 10000 steps with 6480 atoms
+
+Performance: 0.697 ns/day, 34.441 hours/ns, 8.065 timesteps/s, 52.263 katom-step/s
+92.4% CPU use with 4 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 688        | 721.07     | 748.65     |  80.6 | 58.16
+Kspace  | 475.93     | 503.6      | 536.33     |  96.0 | 40.62
+Neigh   | 4.8036     | 5.0317     | 5.2143     |   6.6 |  0.41
+Comm    | 8.3422     | 8.606      | 8.8673     |   6.7 |  0.69
+Output  | 0.17915    | 0.17937    | 0.17994    |   0.1 |  0.01
+Modify  | 0.76414    | 0.77147    | 0.77658    |   0.6 |  0.06
+Other   |            | 0.6332     |            |       |  0.05
+
+Nlocal:           1620 ave        1633 max        1614 min
+Histogram: 2 0 1 0 0 0 0 0 0 1
+Nghost:        16942.8 ave       16972 max       16908 min
+Histogram: 1 0 1 0 0 0 0 0 1 1
+Neighs:    1.25983e+06 ave 1.32048e+06 max 1.20404e+06 min
+Histogram: 1 0 1 0 0 0 1 0 0 1
+FullNghs:  2.51964e+06 ave 2.54292e+06 max 2.50517e+06 min
+Histogram: 1 1 0 1 0 0 0 0 0 1
+
+Total # of neighbors = 10078573
+Ave neighs/atom = 1555.3353
+Neighbor list builds = 104
+Dangerous builds = 0
+
+unfix nvt
+undump coord
+Total wall time: 0:20:40
