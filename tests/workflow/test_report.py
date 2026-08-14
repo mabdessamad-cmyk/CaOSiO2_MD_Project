@@ -79,6 +79,19 @@ assert results["modifiers"]["coordination"]["number_ca"] == 720
 assert "Si-O" in results["rdf"]
 assert "O-Ca" in results["rdf"]
 
+assert sum(results["qn"]["distribution"].values()) == 1675
+
+assert results["qn"]["distribution"] == {
+    0: 4,
+    1: 37,
+    2: 280,
+    3: 729,
+    4: 625,
+}
+
+assert results["qn"]["SiV"]["total"] == 5
+assert results["qn"]["SiV"]["BO4_NBO1"] == 3
+assert results["qn"]["SiV"]["BO5_NBO0"] == 2
 print("Report sections : PASS")
 print("Composition      : PASS")
 print("Density           : PASS")

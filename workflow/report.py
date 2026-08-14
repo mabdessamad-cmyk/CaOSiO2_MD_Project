@@ -40,30 +40,88 @@ class StructuralReport:
         """
 
         density = DensityAnalysis(self.system)
+
         coordination = CoordinationAnalysis(
             self.system,
             self.neighbors,
         )
+
         qn = QnAnalysis(
             self.system,
             self.neighbors,
         )
+
         topology = TopologyAnalysis(
             self.system,
             self.neighbors,
         )
+
         rings = RingAnalysis(
             self.system,
             topology,
         )
+
         modifiers = ModifierAnalysis(
             self.system,
             self.neighbors,
         )
+
         angles = BondAngleAnalysis(
             self.system,
             self.neighbors,
         )
+
+        si_indices = [
+            i for i, atom_type in enumerate(self.system.types)
+            if atom_type == 1
+        ]
+
+        si4_qn = {
+            0: 0,
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+        }
+
+        siv_count = 0
+        siv_bo4_nbo1 = 0
+        siv_bo5_nbo0 = 0
+
+        for i in si_indices:
+
+            oxygen_neighbors = [
+                j
+                for j in self.neighbors.neighbors_of(i)
+                if self.system.types[j] == 2
+            ]
+
+            si_coordination = len(oxygen_neighbors)
+
+            bo = sum(
+                qn.oxygen_class(j) == "BO"
+                for j in oxygen_neighbors
+            )
+
+            nbo = sum(
+                qn.oxygen_class(j) == "NBO"
+                for j in oxygen_neighbors
+            )
+
+            if si_coordination == 4:
+
+                if bo in si4_qn:
+                    si4_qn[bo] += 1
+
+            elif si_coordination == 5:
+
+                siv_count += 1
+
+                if bo == 4 and nbo == 1:
+                    siv_bo4_nbo1 += 1
+
+                elif bo == 5 and nbo == 0:
+                    siv_bo5_nbo0 += 1
 
         result = {
             "composition": density.composition(),
@@ -82,10 +140,13 @@ class StructuralReport:
 
             "qn": {
                 "oxygen": qn.oxygen_statistics(),
-                "distribution": qn.qn_distribution(),
-                "fractions": qn.qn_fractions(),
+                "distribution": si4_qn,
+                "SiV": {
+                    "total": siv_count,
+                    "BO4_NBO1": siv_bo4_nbo1,
+                    "BO5_NBO0": siv_bo5_nbo0,
+                },
             },
-
             "topology": {
                 "network": topology.network_statistics(),
                 "components": topology.component_statistics(),
@@ -163,8 +224,37 @@ class StructuralReport:
             f"Other={oxygen['other']} "
             f"({100 * oxygen['other_fraction']:.2f} %)"
         )
-        print(f"Qn distribution : {data['qn']['distribution']}")
-        print(f"Qn fractions    : {data['qn']['fractions']}")
+
+        print(
+            f"Qn distribution (SiIV only) : "
+            f"{data['qn']['distribution']}"
+        )
+
+        qn_distribution = data["qn"]["distribution"]
+        qn_total = sum(qn_distribution.values())
+
+        qn_fractions = {
+            q: qn_distribution[q] / qn_total
+            for q in range(5)
+        }
+
+        print(
+            "Qn fractions (SiIV only) : "
+            f"{qn_fractions}"
+        )
+
+        print(
+            "SiV total       : "
+            f"{data['qn']['SiV']['total']}"
+        )
+        print(
+            "SiV(BO4,NBO1)   : "
+            f"{data['qn']['SiV']['BO4_NBO1']}"
+        )
+        print(
+            "SiV(BO5,NBO0)   : "
+            f"{data['qn']['SiV']['BO5_NBO0']}"
+        )
 
         print()
         print("===== Silicate Network =====")
