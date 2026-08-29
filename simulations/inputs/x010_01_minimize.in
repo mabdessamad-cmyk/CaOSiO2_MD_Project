@@ -1,0 +1,72 @@
+# ==========================================================
+# x = 0.10 CaO - 0.90 SiO2
+# x = 0.10 system (6496 atoms)
+# Pedone 2006
+# Stage 1: Energy minimization
+# ==========================================================
+
+units metal
+dimension 3
+boundary p p p
+atom_style charge
+
+read_data glass_initial_x010_6496.data
+
+# -----------------------------
+# Masses (safety)
+# -----------------------------
+
+mass 1 28.0855
+mass 2 15.9994
+mass 3 40.078
+
+# -----------------------------
+# Neighbor settings
+# -----------------------------
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+
+# -----------------------------
+# Pedone 2006
+# -----------------------------
+
+pair_style hybrid/overlay pedone 15.0 coul/long 15.0
+
+kspace_style pppm 1.0e-6
+
+pair_coeff * * coul/long
+
+# Si-O
+pair_coeff 1 2 pedone 0.340554 2.006700 2.100000 1.0
+
+# O-O
+pair_coeff 2 2 pedone 0.042395 1.379316 3.618701 22.0
+
+# Ca-O
+pair_coeff 2 3 pedone 0.030211 2.241334 2.923245 5.0
+
+# -----------------------------
+# Output
+# -----------------------------
+
+thermo 50
+
+thermo_style custom step pe etotal press density lx ly lz
+
+# -----------------------------
+# Minimization
+# -----------------------------
+reset_timestep 0
+
+min_style cg
+
+minimize 1.0e-6 1.0e-8 10000 100000
+
+compute q all property/atom q
+
+write_data minimized_x010_6496.data
+write_restart minimized_x010_6496.restart
+
+dump            d1 all custom 100 minimize_x010_6496.lammpstrj id type q x y z
+dump_modify     d1 sort id

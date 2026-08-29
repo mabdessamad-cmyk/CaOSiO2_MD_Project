@@ -1,0 +1,240 @@
+================ x = 0.010 ================
+Reading simulations/data/x010_glass_final_300K.data
+Lines read : 13012
+Atoms : 6496
+
+Simulation box
+[[ 4.49224166 48.40322734]
+ [ 4.49224166 48.40322734]
+ [ 4.49224166 48.40322734]]
+
+Atom table successfully read.
+Building neighbor list (6496 atoms)...
+Neighbor list completed.
+
+============================================================
+           CaO-SiO2 STRUCTURAL REPORT
+============================================================
+
+===== Composition =====
+{'Si': 2016, 'O': 4256, 'Ca': 224}
+
+===== Density =====
+Mass        : 133691.2864 amu
+Volume      : 84668.050 Å^3
+Density     : 2.6220 g/cm^3
+
+===== Coordination =====
+Si-O   : mean=4.004, std=0.063, range=4–5
+O-Si   : mean=1.897, std=0.308, range=0–3
+Ca-O   : mean=6.223, std=1.020, range=3–9
+O-Ca   : mean=0.328, std=0.615, range=0–4
+
+===== Qn / Oxygen Network =====
+BO=3811 (89.54 %)  NBO=441 (10.36 %)  Other=4 (0.09 %)
+Qn distribution (SiIV only) : {0: 0, 1: 2, 2: 33, 3: 377, 4: 1596}
+Qn fractions (SiIV only) : {0: 0.0, 1: 0.00099601593625498, 2: 0.01643426294820717, 3: 0.18774900398406374, 4: 0.7948207171314741}
+SiV total       : 8
+SiV(BO4,NBO1)   : 1
+SiV(BO5,NBO0)   : 7
+
+===== Silicate Network =====
+{'number_si': 2016, 'mean_degree': 3.7807539682539684, 'std_degree': 0.4656308945340401, 'minimum_degree': 1, 'maximum_degree': 5, 'bridging_oxygen_count': 3811}
+{'number_components': 1, 'largest_component': 2016, 'smallest_component': 2016, 'mean_component': 2016.0, 'isolated_si': 0, 'percolating_fraction': 1.0}
+
+===== Ring Topology =====
+{'number': 1452, 'mean': 5.413911845730028, 'std': 0.9806105721218793, 'minimum': 3, 'maximum': 10}
+Distribution : {3: 12, 4: 227, 5: 575, 6: 461, 7: 147, 8: 24, 9: 5, 10: 1}
+
+===== Ca Modifier Environment =====
+{'BO': 684, 'NBO': 706, 'other': 4}
+{'number_ca': 224, 'mean_ca_o': 6.223214285714286, 'std_ca_o': 1.0195396495177496, 'mean_bo': 3.0535714285714284, 'mean_nbo': 3.1517857142857144, 'mean_other': 0.017857142857142856}
+
+===== Bond Angles =====
+O-Si-O   : mean=109.301 deg, std=6.981 deg
+Si-O-Si  : mean=149.091 deg, std=13.378 deg
+O-Ca-O   : mean=100.698 deg, std=31.059 deg
+
+============================================================
+Structural report completed.
+============================================================
+================ x = 0.020 ================
+Reading simulations/data/x020_glass_final_300K.data
+Lines read : 13460
+Atoms : 6720
+
+Simulation box
+[[ 4.74645066 49.25819634]
+ [ 4.74645066 49.25819634]
+ [ 4.74645066 49.25819634]]
+
+Atom table successfully read.
+Building neighbor list (6720 atoms)...
+Neighbor list completed.
+
+============================================================
+           CaO-SiO2 STRUCTURAL REPORT
+============================================================
+
+===== Composition =====
+{'Si': 1920, 'O': 4320, 'Ca': 480}
+
+===== Density =====
+Mass        : 142279.0080 amu
+Volume      : 88190.922 Å^3
+Density     : 2.6790 g/cm^3
+
+===== Coordination =====
+Si-O   : mean=4.006, std=0.075, range=4–5
+O-Si   : mean=1.780, std=0.416, range=0–3
+Ca-O   : mean=6.150, std=1.044, range=4–9
+O-Ca   : mean=0.683, std=0.877, range=0–5
+
+===== Qn / Oxygen Network =====
+BO=3371 (78.03 %)  NBO=946 (21.90 %)  Other=3 (0.07 %)
+Qn distribution (SiIV only) : {0: 0, 1: 6, 2: 139, 3: 652, 4: 1112}
+Qn fractions (SiIV only) : {0: 0.0, 1: 0.003143006809848088, 2: 0.07281299109481404, 3: 0.34154007333682557, 4: 0.5825039287585123}
+SiV total       : 11
+SiV(BO4,NBO1)   : 1
+SiV(BO5,NBO0)   : 10
+
+===== Silicate Network =====
+{'number_si': 1920, 'mean_degree': 3.511458333333333, 'std_degree': 0.6510199996394547, 'minimum_degree': 1, 'maximum_degree': 5, 'bridging_oxygen_count': 3371}
+{'number_components': 1, 'largest_component': 1920, 'smallest_component': 1920, 'mean_component': 1920.0, 'isolated_si': 0, 'percolating_fraction': 1.0}
+
+===== Ring Topology =====
+{'number': 1236, 'mean': 5.650485436893204, 'std': 1.247978854252628, 'minimum': 3, 'maximum': 14}
+Distribution : {3: 6, 4: 162, 5: 454, 6: 397, 7: 138, 8: 44, 9: 18, 10: 9, 11: 4, 12: 2, 14: 2}
+
+===== Ca Modifier Environment =====
+{'BO': 1101, 'NBO': 1842, 'other': 9}
+{'number_ca': 480, 'mean_ca_o': 6.15, 'std_ca_o': 1.044030650891055, 'mean_bo': 2.29375, 'mean_nbo': 3.8375, 'mean_other': 0.01875}
+
+===== Bond Angles =====
+O-Si-O   : mean=109.282 deg, std=7.020 deg
+Si-O-Si  : mean=148.644 deg, std=13.600 deg
+O-Ca-O   : mean=101.169 deg, std=30.726 deg
+
+============================================================
+Structural report completed.
+============================================================
+================ x = 0.030 ================
+Reading simulations/data/glass_final_300K.data
+Lines read : 12980
+Atoms : 6480
+
+Simulation box
+[[ 4.89512345 48.98758755]
+ [ 4.89512345 48.98758755]
+ [ 4.89512345 48.98758755]]
+
+Atom table successfully read.
+Building neighbor list (6480 atoms)...
+Neighbor list completed.
+
+============================================================
+           CaO-SiO2 STRUCTURAL REPORT
+============================================================
+
+===== Composition =====
+{'Si': 1680, 'O': 4080, 'Ca': 720}
+
+===== Density =====
+Mass        : 141317.3520 amu
+Volume      : 85722.161 Å^3
+Density     : 2.7375 g/cm^3
+
+===== Coordination =====
+Si-O   : mean=4.003, std=0.054, range=4–5
+O-Si   : mean=1.648, std=0.482, range=0–2
+Ca-O   : mean=6.157, std=0.963, range=4–9
+O-Ca   : mean=1.087, std=1.045, range=0–5
+
+===== Qn / Oxygen Network =====
+BO=2653 (65.02 %)  NBO=1419 (34.78 %)  Other=8 (0.20 %)
+Qn distribution (SiIV only) : {0: 4, 1: 37, 2: 280, 3: 729, 4: 625}
+Qn fractions (SiIV only) : {0: 0.0023880597014925373, 1: 0.02208955223880597, 2: 0.16716417910447762, 3: 0.43522388059701494, 4: 0.373134328358209}
+SiV total       : 5
+SiV(BO4,NBO1)   : 3
+SiV(BO5,NBO0)   : 2
+
+===== Silicate Network =====
+{'number_si': 1680, 'mean_degree': 3.158333333333333, 'std_degree': 0.7935316378805953, 'minimum_degree': 0, 'maximum_degree': 5, 'bridging_oxygen_count': 2653}
+{'number_components': 5, 'largest_component': 1676, 'smallest_component': 1, 'mean_component': 336.0, 'isolated_si': 4, 'percolating_fraction': 0.9976190476190476}
+
+===== Ring Topology =====
+{'number': 871, 'mean': 6.2284730195177955, 'std': 1.9756072382812926, 'minimum': 3, 'maximum': 15}
+Distribution : {3: 4, 4: 111, 5: 270, 6: 214, 7: 100, 8: 59, 9: 52, 10: 19, 11: 21, 12: 8, 13: 5, 14: 7, 15: 1}
+
+===== Ca Modifier Environment =====
+{'BO': 1239, 'NBO': 3160, 'other': 34}
+{'number_ca': 720, 'mean_ca_o': 6.156944444444444, 'std_ca_o': 0.9626823620732404, 'mean_bo': 1.7208333333333334, 'mean_nbo': 4.388888888888889, 'mean_other': 0.04722222222222222}
+
+===== Bond Angles =====
+O-Si-O   : mean=109.291 deg, std=6.725 deg
+Si-O-Si  : mean=148.416 deg, std=13.622 deg
+O-Ca-O   : mean=101.452 deg, std=30.612 deg
+
+============================================================
+Structural report completed.
+============================================================
+================ x = 0.040 ================
+Reading simulations/data/x040_glass_final_300K.data
+Lines read : 13540
+Atoms : 6760
+
+Simulation box
+[[ 5.18831821 50.02557979]
+ [ 5.18831821 50.02557979]
+ [ 5.18831821 50.02557979]]
+
+Atom table successfully read.
+Building neighbor list (6760 atoms)...
+Neighbor list completed.
+
+============================================================
+           CaO-SiO2 STRUCTURAL REPORT
+============================================================
+
+===== Composition =====
+{'Si': 1560, 'O': 4160, 'Ca': 1040}
+
+===== Density =====
+Mass        : 152052.0040 amu
+Volume      : 90139.935 Å^3
+Density     : 2.8011 g/cm^3
+
+===== Coordination =====
+Si-O   : mean=4.004, std=0.067, range=4–5
+O-Si   : mean=1.502, std=0.511, range=0–3
+Ca-O   : mean=6.220, std=0.865, range=3–9
+O-Ca   : mean=1.555, std=1.125, range=0–6
+
+===== Qn / Oxygen Network =====
+BO=2107 (50.65 %)  NBO=2030 (48.80 %)  Other=23 (0.55 %)
+Qn distribution (SiIV only) : {0: 12, 1: 134, 2: 472, 3: 633, 4: 302}
+Qn fractions (SiIV only) : {0: 0.0077269800386349004, 1: 0.08628461043142305, 2: 0.3039278815196394, 3: 0.407598197037991, 4: 0.19446233097231166}
+SiV total       : 7
+SiV(BO4,NBO1)   : 2
+SiV(BO5,NBO0)   : 3
+
+===== Silicate Network =====
+{'number_si': 1560, 'mean_degree': 2.7012820512820515, 'std_degree': 0.9103385661732997, 'minimum_degree': 0, 'maximum_degree': 5, 'bridging_oxygen_count': 2107}
+{'number_components': 15, 'largest_component': 1542, 'smallest_component': 1, 'mean_component': 104.0, 'isolated_si': 12, 'percolating_fraction': 0.9884615384615385}
+
+===== Ring Topology =====
+{'number': 533, 'mean': 7.367729831144465, 'std': 3.658992611209397, 'minimum': 3, 'maximum': 26}
+Distribution : {3: 2, 4: 70, 5: 135, 6: 94, 7: 63, 8: 39, 9: 25, 10: 17, 11: 14, 12: 23, 13: 13, 14: 6, 15: 7, 16: 8, 17: 6, 18: 2, 19: 1, 20: 1, 21: 1, 22: 2, 23: 2, 24: 1, 26: 1}
+
+===== Ca Modifier Environment =====
+{'BO': 1395, 'NBO': 4973, 'other': 101}
+{'number_ca': 1040, 'mean_ca_o': 6.220192307692308, 'std_ca_o': 0.8652344955262248, 'mean_bo': 1.3413461538461537, 'mean_nbo': 4.781730769230769, 'mean_other': 0.09711538461538462}
+
+===== Bond Angles =====
+O-Si-O   : mean=109.291 deg, std=6.565 deg
+Si-O-Si  : mean=146.933 deg, std=13.885 deg
+O-Ca-O   : mean=101.618 deg, std=30.511 deg
+
+============================================================
+Structural report completed.
+============================================================
