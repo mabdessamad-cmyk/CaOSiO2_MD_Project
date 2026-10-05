@@ -19,3 +19,21 @@ log.lammps
 
 .DS_Store
 Thumbs.db
+
+# Editor temporary files
+*.swp
+*.swo
+*.swn
+*.bak
+
+# Windows metadata
+*:Zone.Identifier
+
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+
+# LAMMPS trajectories and restart files
+*.lammpstrj
+*.restart*
+log.lammps
