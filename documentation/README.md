@@ -1,93 +1,149 @@
-# CaOSiO2 Glass Molecular Dynamics Workflow
+# CaO–SiO₂ Glass Molecular Dynamics and Structural Analysis
 
 ## Project
 
-Molecular Dynamics simulation and structural analysis of
-xCaO–(1−x)SiO₂ glasses using LAMMPS.
+Molecular dynamics simulation and structural analysis of binary calcium silicate glasses of composition
 
-Current force field:
-- Pedone et al. (2006)
+**x(CaO)–(1−x)SiO₂**
 
-Current composition:
-- 30CaO–70SiO₂
+with
 
-Future compositions:
-- 10CaO–90SiO₂
-- 20CaO–80SiO₂
-- 30CaO–70SiO₂
-- 40CaO–60SiO₂
+**x = 0.10, 0.20, 0.30, and 0.40.**
 
----
+The simulations were performed with **LAMMPS** using the **Pedone et al. (2006)** interaction potential. The project provides the simulation inputs, final and intermediate atomic configurations, structural-analysis scripts, partial radial distribution functions, figures, tables, and consolidated structural reports associated with the CaO–SiO₂ glass study.
 
-## Directory structure
+## Scientific scope
 
-CaOSiO2_generator/
+The study examines the composition-driven structural evolution of CaO–SiO₂ glasses through:
 
-generator/
-    Glass generation scripts
+* atomic density and structural relaxation;
+* Si–O and Ca–O coordination;
+* Si oxygen-coordination states;
+* Qⁿ speciation of SiIV sites;
+* bridging and non-bridging oxygen populations;
+* Si–O–Si network connectivity;
+* largest-network fraction and connected-component analysis;
+* ring statistics;
+* O–Si–O, Si–O–Si, and O–Ca–O bond angles;
+* partial radial distribution functions.
 
-simulations/
-    inputs/
-    data/
-    restart/
-    trajectories/
-    logs/
+The structural analysis is based on chemically specific distance cutoffs and a common analysis protocol applied across all four compositions.
 
-analysis/
-    scripts/
-    figures/
-    tables/
+## Simulation method
 
-tests/
-    Validation scripts
+The production simulations use:
 
-workflow/
-    Modular version under development
+* **LAMMPS 29 Aug 2024**
+* **Pedone et al. (2006)** potential
+* periodic boundary conditions
+* `pedone` short-range interactions combined with `coul/long`
+* PPPM treatment of long-range Coulomb interactions
+* classical molecular dynamics with a 0.5 fs timestep during the production melt–quench protocol
+* melt–quench simulations followed by final 300 K NPT relaxation.
 
-documentation/
-    Notes and documentation
+The final structures contain approximately 6,500–6,800 atoms per composition.
 
----
+The exact simulation parameters are contained in the LAMMPS input files included in the repository.
 
-## Simulation workflow
+## Compositions and final structures
 
-1. Generate initial structure
-2. Energy minimization
-3. Relaxation at 300 K
-4. Heating
-5. Melting
-6. Quenching
-7. Final relaxation
-8. RDF
-9. Coordination analysis
-10. Bond-angle analysis
-11. BO/NBO analysis
-12. Qn analysis
+| CaO fraction x | Composition  | Final atom count |
+| -------------: | ------------ | ---------------: |
+|           0.10 | 10CaO–90SiO₂ |             6496 |
+|           0.20 | 20CaO–80SiO₂ |             6720 |
+|           0.30 | 30CaO–70SiO₂ |             6480 |
+|           0.40 | 40CaO–60SiO₂ |             6760 |
 
----
+## Repository structure
 
-## Current status
+```text
+CaOSiO2_MD_Project/
 
-✓ Stable glass generation
+├── lammps/
+│   ├── data/
+│   ├── forcefields/
+│   ├── inputs/
+│   └── logs/
+│
+├── simulations/
+│   ├── data/
+│   ├── inputs/
+│   └── logs/
+│
+├── analysis/
+│   ├── scripts/
+│   ├── figures/
+│   └── tables/
+│
+├── workflow/
+│   └── analysis and workflow scripts
+│
+├── generator/
+│   └── structure-generation and validation scripts
+│
+├── tests/
+│   └── validation tests
+│
+├── output/
+│   └── generated and consolidated project outputs
+│
+└── documentation/
+    └── project documentation
+```
 
-✓ Stable melt-quench procedure
+Large trajectory and restart files are intentionally excluded from the public repository. The retained atomic configurations and analysis outputs are sufficient to document and reproduce the reported structural analysis.
 
-✓ Density validated
+## Structural-analysis workflow
 
-✓ RDF validated
+The principal analysis sequence is:
 
-✓ Coordination validated
+1. read the final equilibrated glass configurations;
+2. determine chemically specific coordination numbers;
+3. classify Si oxygen coordination;
+4. calculate Qⁿ distributions for SiIV sites;
+5. classify oxygen atoms as bridging, non-bridging, or other according to Si connectivity;
+6. construct the Si–O network through bridging oxygen;
+7. determine connected components and the largest-network fraction;
+8. calculate ring statistics;
+9. calculate O–Si–O, Si–O–Si, and O–Ca–O angle distributions;
+10. calculate partial radial distribution functions for the relevant network and modifier pairs;
+11. generate consolidated structural reports, tables, and figures.
 
-✓ Bond angles validated
+The analysis scripts used to generate the reported structural quantities are included in `analysis/` and `workflow/`.
 
-✓ Qn validated
+## Reproducibility
 
----
+The repository preserves the validated scientific state of the project together with the simulation inputs, final configurations, structural-analysis scripts, and derived structural results.
 
-## Next objectives
+The scientific/data state used for the manuscript is identified by Git commit:
 
-- Complete workflow modularization
-- Analyze all four compositions
-- Publish structural paper
-- Compute dielectric properties
-- Publish dielectric/conductivity paper
+```text
+a5c065e
+```
+
+The subsequent commits contain repository-cleanup operations only; they do not change the scientific workflow or reported structural results.
+
+## Reference
+
+The interaction potential used in the simulations is:
+
+Pedone, A.; Malavasi, G.; Menziani, M. C.; Cormack, A. N.; Segre, U.
+*Atomic-scale modeling of structural, vibrational and electronic properties of (CaO)x(SiO2)1−x glasses.*
+**J. Phys. Chem. B 110 (2006) 11780–11795.**
+DOI: 10.1021/jp0611018.
+
+The manuscript associated with this repository provides the complete methodological and structural-analysis description.
+
+## Data availability
+
+The simulation inputs, atomic configurations, structural-analysis scripts, partial radial distribution functions, figures, tables, and consolidated structural reports are provided in this repository.
+
+The repository will be archived through Zenodo upon public release, and the resulting persistent DOI will be added to this section and to the associated manuscript.
+
+
+## License
+
+The source code and software components in this repository are licensed under the MIT License. See `LICENSE`.
+
+Research data, figures, tables, and derived research materials are licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0), unless otherwise stated. See `DATA_LICENSE.md`.
+
