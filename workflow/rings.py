@@ -1,10 +1,20 @@
 """
-Ring-topology analysis for the silicate Si-Si network.
+Primitive-ring analysis for the silicate Si-Si network.
 
-The graph contains Si atoms as nodes and Si-O-Si bridging
-connections as edges.
+Graph:
+    Si atoms are vertices.
+    Si-Si edges represent shared bridging oxygens.
 
-Ring size = number of Si atoms in the cycle.
+Ring size:
+    Number of Si vertices in the cycle.
+
+Convention:
+    Enumerate chordless cycles, then retain cycles for which
+    the shortest graph distance between every pair of ring
+    vertices equals their shorter distance along the ring.
+
+This is a graph-topological analysis; periodic image information
+is not explicitly represented in the Si-Si graph.
 """
 
 from collections import deque
@@ -16,113 +26,63 @@ SI = 1
 
 class RingAnalysis:
 
-    def __init__(self, system, topology):
+    def __init__(self, system, topology, max_ring_size=12):
+        if not isinstance(max_ring_size, int) or isinstance(max_ring_size, bool):
+            raise TypeError("max_ring_size must be an integer.")
+        if max_ring_size < 3:
+            raise ValueError("max_ring_size must be at least 3.")
+
         self.system = system
         self.topology = topology
+        self.max_ring_size = max_ring_size
+        self._cycles_cache = None
 
     # --------------------------------------------------------
     # Graph
     # --------------------------------------------------------
 
     def graph(self):
-        """
-        Return the validated Si-Si network graph.
-        """
+        """Return and validate the undirected Si-Si network."""
+        source = self.topology.si_connections()
+        graph = {
+            int(node): set(neighbors)
+            for node, neighbors in source.items()
+        }
 
-        return self.topology.si_connections()
+        for node, neighbors in graph.items():
+            for neighbor in neighbors:
+                if neighbor not in graph:
+                    raise ValueError(
+                        f"Graph edge {node}-{neighbor} references "
+                        "a missing vertex."
+                    )
+                if node not in graph[neighbor]:
+                    raise ValueError(
+                        f"Graph is not symmetric at edge "
+                        f"{node}-{neighbor}."
+                    )
+
+        return graph
 
     # --------------------------------------------------------
-    # Shortest path
+    # Shortest paths
     # --------------------------------------------------------
 
     @staticmethod
-    def shortest_path(graph, start, target, excluded_edge):
-        """
-        Shortest path between two Si atoms while excluding
-        one Si-Si edge.
-        """
-
-        queue = deque([(start, [start])])
-        visited = {start}
+    def _distances_from(graph, start):
+        """Unweighted shortest-path distances from one vertex."""
+        distances = {start: 0}
+        queue = deque([start])
 
         while queue:
-
-            current, path = queue.popleft()
+            current = queue.popleft()
 
             for neighbor in graph[current]:
+                if neighbor not in distances:
+                    distances[neighbor] = distances[current] + 1
+                    queue.append(neighbor)
 
-                edge = tuple(
-                    sorted((current, neighbor))
-                )
-
-                if edge == excluded_edge:
-                    continue
-
-                if neighbor == target:
-                    return path + [neighbor]
-
-                if neighbor not in visited:
-
-                    visited.add(neighbor)
-
-                    queue.append(
-                        (neighbor, path + [neighbor])
-                    )
-
-        return None
-
-    # --------------------------------------------------------
-    # Cycle detection
-    # --------------------------------------------------------
-
-    def primitive_cycles(self):
-        """
-        Determine primitive shortest cycles.
-
-        Each graph edge is temporarily removed and the
-        shortest alternative path between its endpoints
-        is searched.
-
-        Duplicate cycles are removed using canonical
-        rotation/reversal-independent representations.
-        """
-
-        graph = self.graph()
-
-        cycles = set()
-
-        for i in graph:
-
-            for j in graph[i]:
-
-                if i >= j:
-                    continue
-
-                edge = (i, j)
-
-                path = self.shortest_path(
-                    graph,
-                    i,
-                    j,
-                    edge
-                )
-
-                if path is None:
-                    continue
-
-                # path includes both endpoints.
-                cycle = path
-
-                if len(cycle) < 3:
-                    continue
-
-                canonical = self._canonical_cycle(
-                    cycle
-                )
-
-                cycles.add(canonical)
-
-        return cycles
+        return distances
 
     # --------------------------------------------------------
     # Canonical cycle representation
@@ -130,35 +90,164 @@ class RingAnalysis:
 
     @staticmethod
     def _canonical_cycle(cycle):
-        """
-        Canonical representation independent of starting
-        atom and traversal direction.
-        """
-
+        """Normalize rotation and traversal direction."""
         cycle = list(cycle)
 
         variants = []
-
-        for seq in (cycle, list(reversed(cycle))):
-
-            for k in range(len(seq)):
-
-                rotated = (
-                    seq[k:] + seq[:k]
-                )
-
+        for sequence in (cycle, list(reversed(cycle))):
+            for k in range(len(sequence)):
                 variants.append(
-                    tuple(rotated)
+                    tuple(sequence[k:] + sequence[:k])
                 )
 
         return min(variants)
+
+    # --------------------------------------------------------
+    # Chordless-cycle enumeration
+    # --------------------------------------------------------
+
+    def _chordless_cycles(self, graph, max_size):
+        """
+        Enumerate chordless simple cycles up to max_size vertices.
+
+        The smallest vertex in each cycle is used as its start
+        vertex, avoiding rotational duplicates. Canonicalization
+        removes duplicates caused by reverse traversal.
+        """
+        cycles = set()
+
+        for start in sorted(graph):
+            for first in sorted(graph[start]):
+                if first <= start:
+                    continue
+
+                stack = [[start, first]]
+
+                while stack:
+                    path = stack.pop()
+                    current = path[-1]
+
+                    for neighbor in sorted(graph[current]):
+
+                        # Close a cycle at its starting vertex.
+                        if neighbor == start:
+                            if 3 <= len(path) <= max_size:
+                                cycles.add(
+                                    self._canonical_cycle(path)
+                                )
+                            continue
+
+                        # Do not extend paths beyond the size limit.
+                        if len(path) >= max_size:
+                            continue
+
+                        # Keep start as the smallest cycle vertex.
+                        if neighbor <= start or neighbor in path:
+                            continue
+
+                        # A new vertex must not connect to an
+                        # earlier path vertex, except start when
+                        # it closes the cycle.
+                        earlier = path[:-1]
+                        linked_earlier = [
+                            vertex
+                            for vertex in earlier
+                            if vertex in graph[neighbor]
+                        ]
+
+                        if not linked_earlier:
+                            stack.append(path + [neighbor])
+
+                        elif linked_earlier == [start]:
+                            cycles.add(
+                                self._canonical_cycle(
+                                    path + [neighbor]
+                                )
+                            )
+
+        return cycles
+
+    # --------------------------------------------------------
+    # Primitive-ring criterion
+    # --------------------------------------------------------
+
+    @staticmethod
+    def _is_primitive(cycle, distance_cache):
+        """
+        Check the shortest-path criterion.
+
+        For every pair of cycle vertices, the shortest distance
+        in the full graph must equal the shorter arc distance
+        along the cycle. A strictly shorter external path rejects
+        the candidate.
+        """
+        n = len(cycle)
+
+        for i in range(n):
+            start = cycle[i]
+
+            if start not in distance_cache:
+                # The cache is populated by primitive_cycles().
+                raise RuntimeError(
+                    "Missing shortest-path distances for a cycle vertex."
+                )
+
+            distances = distance_cache[start]
+
+            for j in range(i + 1, n):
+                target = cycle[j]
+                ring_distance = min(j - i, n - (j - i))
+                graph_distance = distances.get(target)
+
+                if graph_distance is None:
+                    return False
+
+                if graph_distance < ring_distance:
+                    return False
+
+        return True
+
+    # --------------------------------------------------------
+    # Ring detection
+    # --------------------------------------------------------
+
+    def primitive_cycles(self):
+        """
+        Return unique size-limited primitive rings.
+
+        Only rings containing 3 through max_ring_size Si vertices
+        are considered. This is not exhaustive for larger rings.
+        """
+        if self._cycles_cache is not None:
+            return set(self._cycles_cache)
+
+        graph = self.graph()
+        candidates = self._chordless_cycles(
+            graph, self.max_ring_size
+        )
+
+        # Cache distances only for vertices appearing in candidates.
+        distance_cache = {}
+        for cycle in candidates:
+            for vertex in cycle:
+                if vertex not in distance_cache:
+                    distance_cache[vertex] = (
+                        self._distances_from(graph, vertex)
+                    )
+
+        accepted = {
+            cycle
+            for cycle in candidates
+            if self._is_primitive(cycle, distance_cache)
+        }
+        self._cycles_cache = accepted
+        return set(accepted)
 
     # --------------------------------------------------------
     # Ring sizes
     # --------------------------------------------------------
 
     def ring_sizes(self):
-
         cycles = self.primitive_cycles()
 
         return np.asarray(
@@ -171,32 +260,24 @@ class RingAnalysis:
     # --------------------------------------------------------
 
     def distribution(self):
-
         sizes = self.ring_sizes()
 
         if len(sizes) == 0:
             return {}
 
-        result = {}
-
-        for size in sorted(set(sizes)):
-
-            result[int(size)] = int(
-                np.sum(sizes == size)
-            )
-
-        return result
+        return {
+            int(size): int(np.sum(sizes == size))
+            for size in sorted(set(sizes))
+        }
 
     # --------------------------------------------------------
     # Statistics
     # --------------------------------------------------------
 
     def statistics(self):
-
         sizes = self.ring_sizes()
 
         if len(sizes) == 0:
-
             return {
                 "number": 0,
                 "mean": np.nan,
@@ -218,51 +299,29 @@ class RingAnalysis:
     # --------------------------------------------------------
 
     def report(self):
-
         stats = self.statistics()
         distribution = self.distribution()
 
         print()
-        print("===== Silicate Ring Topology =====")
-
         print(
-            f"Number of rings : {stats['number']}"
+            "===== Silicate Size-Limited Primitive-Ring Topology "
+            f"(3-{self.max_ring_size} Si) ====="
         )
+        print(f"Number of rings : {stats['number']}")
 
         if stats["number"] == 0:
             return
 
-        print(
-            f"Mean ring size  : "
-            f"{stats['mean']:.3f} Si"
-        )
-
-        print(
-            f"Std deviation   : "
-            f"{stats['std']:.3f} Si"
-        )
-
-        print(
-            f"Minimum ring    : "
-            f"{stats['minimum']} Si"
-        )
-
-        print(
-            f"Maximum ring    : "
-            f"{stats['maximum']} Si"
-        )
-
+        print(f"Mean ring size  : {stats['mean']:.3f} Si")
+        print(f"Std deviation   : {stats['std']:.3f} Si")
+        print(f"Minimum ring    : {stats['minimum']} Si")
+        print(f"Maximum ring    : {stats['maximum']} Si")
         print()
         print("Ring-size distribution")
 
         for size, count in distribution.items():
-
-            fraction = (
-                100.0 * count / stats["number"]
-            )
-
+            fraction = 100.0 * count / stats["number"]
             print(
-                f"{size}-member : "
-                f"{count:5d} "
+                f"{size}-member : {count:5d} "
                 f"({fraction:6.2f} %)"
             )
