@@ -158,8 +158,8 @@ def main():
         )
 
     ax1.set_xlabel("Ring size (number of Si atoms)")
-    ax1.set_ylabel("Ring count per Si atom")
-    ax1.set_title("(a) Ring-size distribution (limit = 10)")
+    ax1.set_ylabel("O-labelled ring paths per Si atom")
+    ax1.set_title("(a) O-labelled primitive ring paths (limit = 10)")
     ax1.set_xticks(ring_sizes)
     ax1.grid(True, alpha=0.25)
     ax1.legend(frameon=False, ncol=2)
@@ -181,7 +181,7 @@ def main():
         )
 
     ax2.set_xlabel("CaO mole fraction, x")
-    ax2.set_ylabel("Total bounded ring count per Si atom")
+    ax2.set_ylabel("Total bounded O-labelled paths per Si atom")
     ax2.set_title("(b) Sensitivity to maximum ring size")
     ax2.set_xticks([x for x, _ in STRUCTURES])
     ax2.grid(True, alpha=0.25)
@@ -220,21 +220,27 @@ For each enumerated ring, the local minimum-image bond displacement
 vectors are summed around the closed path. The resulting translation
 is classified as contractible, winding, or invalid using the analyzer's
 periodic-winding tolerance.
+The net displacement is compared with integer lattice translations of the
+orthorhombic simulation cell. A ring is classified as winding if the nearest
+integer winding vector is nonzero and the absolute residual in every Cartesian
+component does not exceed 10^{-5} Å. It is classified as contractible if the
+winding vector is zero and the same residual criterion is satisfied; otherwise,
+it is classified as invalid.
 
 Reported limits and normalization
 ---------------------------------
 Maximum ring sizes: 6, 8, and 10 Si atoms.
-The CSV reports counts by ring size, ring count divided by the number
-of Si atoms, fraction of all enumerated rings at that limit, and the
+The CSV reports oxygen-labelled path counts by ring size, with each count divided by the number
+of Si atoms, fraction of all enumerated paths at that limit, and the
 counts in each winding classification.
 
 Interpretation and limitations
 ------------------------------
-These are bounded, method-dependent primitive ring counts, not a
+These are bounded, method-dependent counts of oxygen-labelled primitive ring paths, not a
 complete census of every possible ring in the periodic multigraph.
 The analysis does not enumerate two-edge, two-Si cycles created by
 parallel BO edges. Rings overlap, so rings per Si is a normalized
-count, not the fraction of Si atoms belonging to rings.
+path count, not the fraction of Si atoms belonging to rings.
 
 A zero winding count means no winding ring was identified among the
 rings enumerated at that size limit; it does not prove that no larger
@@ -251,7 +257,7 @@ consider both the common size limits and the dependence on that limit.
     print(f"Figure PDF:  {FIGURE_PDF.relative_to(ROOT)}")
     print(f"Methods:     {METHODS_PATH.relative_to(ROOT)}")
 
-    print("\nSummary: total bounded rings and rings per Si")
+    print("\nSummary: total bounded O-labelled paths and paths per Si")
     print("x_CaO  max_size  total_rings  rings_per_Si")
     for x, _ in STRUCTURES:
         for max_size in MAX_RING_SIZES:

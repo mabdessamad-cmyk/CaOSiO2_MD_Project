@@ -12,8 +12,8 @@ Structural definition
 ---------------------
 The Si network is constructed from bridging oxygens (BOs), each
 connecting exactly two Si atoms under the existing pair-specific
-neighbor cutoffs. The adopted Si-O and Ca-O cutoffs remain 2.30 A
-and 3.10 A, respectively.
+neighbor cutoffs. The adopted Si-O and Ca-O cutoffs remain 2.30 Å
+and 3.10 Å, respectively.
 
 Candidate rings are chordless, primitive cycles in the underlying
 simple Si graph, with 3 through the selected maximum number of Si
@@ -27,21 +27,28 @@ For each enumerated ring, the local minimum-image bond displacement
 vectors are summed around the closed path. The resulting translation
 is classified as contractible, winding, or invalid using the analyzer's
 periodic-winding tolerance.
+The net displacement is compared with integer lattice translations of the
+orthorhombic simulation cell. A ring is classified as winding if the nearest
+integer winding vector is nonzero and the absolute residual in every Cartesian
+component does not exceed 10^{-5} Å. It is classified as contractible if the
+winding vector is zero and the same residual criterion is satisfied; otherwise,
+it is classified as invalid.
 
 Reported limits and normalization
 ---------------------------------
 Maximum ring sizes: 6, 8, and 10 Si atoms.
-The CSV reports counts by ring size, ring count divided by the number
-of Si atoms, fraction of all enumerated rings at that limit, and the
-counts in each winding classification.
+The CSV reports oxygen-labelled path counts by ring size, counts normalized
+by the number of Si atoms, the fraction of all enumerated paths at each
+maximum-size limit, and counts in each winding classification.
 
 Interpretation and limitations
 ------------------------------
-These are bounded, method-dependent primitive ring counts, not a
-complete census of every possible ring in the periodic multigraph.
+These are bounded, method-dependent counts of oxygen-labelled primitive
+ring paths, not a complete census of every possible ring in the periodic
+multigraph.
 The analysis does not enumerate two-edge, two-Si cycles created by
 parallel BO edges. Rings overlap, so rings per Si is a normalized
-count, not the fraction of Si atoms belonging to rings.
+path count, not the fraction of Si atoms belonging to rings.
 
 A zero winding count means no winding ring was identified among the
 rings enumerated at that size limit; it does not prove that no larger
