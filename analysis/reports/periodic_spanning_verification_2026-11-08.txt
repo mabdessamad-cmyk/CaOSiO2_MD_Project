@@ -1,0 +1,196 @@
+PERIODIC SPANNING VERIFICATION
+Date: 2026-11-08T22:50:42+01:00
+Project: CaO-SiO2_MD_Project
+Input structures: four final 300 K configurations
+Method: BO-connected Si graph; periodic winding rank
+Command: PYTHONPATH="$PWD" python3 analysis/scripts/structural/analyze_periodic_spanning.py
+
+
+============================================================================
+CaO fraction x = 0.10
+Structure: simulations/data/x010_glass_final_300K.data
+============================================================================
+Reading simulations/data/x010_glass_final_300K.data
+Lines read : 13012
+Atoms : 6496
+
+Simulation box
+[[ 4.49224166 48.40322734]
+ [ 4.49224166 48.40322734]
+ [ 4.49224166 48.40322734]]
+
+Atom table successfully read.
+Building neighbor list (6496 atoms)...
+Neighbor list completed.
+
+CONNECTED-COMPONENT VALIDATION
+  Number of components : 1
+  Largest component    : 2016
+  Isolated Si atoms    : 0
+  Expected values      : (1, 2016, 0)
+  Validation            : PASS
+
+PERIODIC WINDING RESULTS
+  x-direction: 1 components; 2016/2016 Si atoms (100.0000%)
+  y-direction: 1 components; 2016/2016 Si atoms (100.0000%)
+  z-direction: 1 components; 2016/2016 Si atoms (100.0000%)
+
+  Components winding in >=1 direction: 1
+  Si in components winding in >=1 direction: 2016/2016 (100.0000%)
+  Components with full 3D winding (rank 3): 1
+  Si in components with full 3D winding: 2016/2016 (100.0000%)
+
+COMPONENT-BY-COMPONENT DETAILS
+  component | Si count | winding x/y/z | winding rank
+          1 |     2016 | XYZ           |            3
+
+  Number of BO-labelled Si-Si edges: 3811
+  Orthorhombic box lengths (Å): [43.91098569 43.91098569 43.91098569]
+
+============================================================================
+CaO fraction x = 0.20
+Structure: simulations/data/x020_glass_final_300K.data
+============================================================================
+Reading simulations/data/x020_glass_final_300K.data
+Lines read : 13460
+Atoms : 6720
+
+Simulation box
+[[ 4.74645066 49.25819634]
+ [ 4.74645066 49.25819634]
+ [ 4.74645066 49.25819634]]
+
+Atom table successfully read.
+Building neighbor list (6720 atoms)...
+Neighbor list completed.
+
+CONNECTED-COMPONENT VALIDATION
+  Number of components : 1
+  Largest component    : 1920
+  Isolated Si atoms    : 0
+  Expected values      : (1, 1920, 0)
+  Validation            : PASS
+
+PERIODIC WINDING RESULTS
+  x-direction: 1 components; 1920/1920 Si atoms (100.0000%)
+  y-direction: 1 components; 1920/1920 Si atoms (100.0000%)
+  z-direction: 1 components; 1920/1920 Si atoms (100.0000%)
+
+  Components winding in >=1 direction: 1
+  Si in components winding in >=1 direction: 1920/1920 (100.0000%)
+  Components with full 3D winding (rank 3): 1
+  Si in components with full 3D winding: 1920/1920 (100.0000%)
+
+COMPONENT-BY-COMPONENT DETAILS
+  component | Si count | winding x/y/z | winding rank
+          1 |     1920 | XYZ           |            3
+
+  Number of BO-labelled Si-Si edges: 3371
+  Orthorhombic box lengths (Å): [44.51174568 44.51174568 44.51174568]
+
+============================================================================
+CaO fraction x = 0.30
+Structure: simulations/data/glass_final_300K.data
+============================================================================
+Reading simulations/data/glass_final_300K.data
+Lines read : 12980
+Atoms : 6480
+
+Simulation box
+[[ 4.89512345 48.98758755]
+ [ 4.89512345 48.98758755]
+ [ 4.89512345 48.98758755]]
+
+Atom table successfully read.
+Building neighbor list (6480 atoms)...
+Neighbor list completed.
+
+CONNECTED-COMPONENT VALIDATION
+  Number of components : 5
+  Largest component    : 1676
+  Isolated Si atoms    : 4
+  Expected values      : (5, 1676, 4)
+  Validation            : PASS
+
+PERIODIC WINDING RESULTS
+  x-direction: 1 components; 1676/1680 Si atoms (99.7619%)
+  y-direction: 1 components; 1676/1680 Si atoms (99.7619%)
+  z-direction: 1 components; 1676/1680 Si atoms (99.7619%)
+
+  Components winding in >=1 direction: 1
+  Si in components winding in >=1 direction: 1676/1680 (99.7619%)
+  Components with full 3D winding (rank 3): 1
+  Si in components with full 3D winding: 1676/1680 (99.7619%)
+
+COMPONENT-BY-COMPONENT DETAILS
+  component | Si count | winding x/y/z | winding rank
+          1 |     1676 | XYZ           |            3
+          2 |        1 | ---           |            0
+          3 |        1 | ---           |            0
+          4 |        1 | ---           |            0
+          5 |        1 | ---           |            0
+
+  Number of BO-labelled Si-Si edges: 2653
+  Orthorhombic box lengths (Å): [44.0924641 44.0924641 44.0924641]
+
+============================================================================
+CaO fraction x = 0.40
+Structure: simulations/data/x040_glass_final_300K.data
+============================================================================
+Reading simulations/data/x040_glass_final_300K.data
+Lines read : 13540
+Atoms : 6760
+
+Simulation box
+[[ 5.18831821 50.02557979]
+ [ 5.18831821 50.02557979]
+ [ 5.18831821 50.02557979]]
+
+Atom table successfully read.
+Building neighbor list (6760 atoms)...
+Neighbor list completed.
+
+CONNECTED-COMPONENT VALIDATION
+  Number of components : 15
+  Largest component    : 1542
+  Isolated Si atoms    : 12
+  Expected values      : (15, 1542, 12)
+  Validation            : PASS
+
+PERIODIC WINDING RESULTS
+  x-direction: 1 components; 1542/1560 Si atoms (98.8462%)
+  y-direction: 1 components; 1542/1560 Si atoms (98.8462%)
+  z-direction: 1 components; 1542/1560 Si atoms (98.8462%)
+
+  Components winding in >=1 direction: 1
+  Si in components winding in >=1 direction: 1542/1560 (98.8462%)
+  Components with full 3D winding (rank 3): 1
+  Si in components with full 3D winding: 1542/1560 (98.8462%)
+
+COMPONENT-BY-COMPONENT DETAILS
+  component | Si count | winding x/y/z | winding rank
+          1 |     1542 | XYZ           |            3
+          2 |        4 | ---           |            0
+          3 |        2 | ---           |            0
+          4 |        1 | ---           |            0
+          5 |        1 | ---           |            0
+          6 |        1 | ---           |            0
+          7 |        1 | ---           |            0
+          8 |        1 | ---           |            0
+          9 |        1 | ---           |            0
+         10 |        1 | ---           |            0
+         11 |        1 | ---           |            0
+         12 |        1 | ---           |            0
+         13 |        1 | ---           |            0
+         14 |        1 | ---           |            0
+         15 |        1 | ---           |            0
+
+  Number of BO-labelled Si-Si edges: 2107
+  Orthorhombic box lengths (Å): [44.83726158 44.83726158 44.83726158]
+
+============================================================================
+SUCCESS: periodic-spanning analysis completed.
+All four connected-component validations passed.
+No ring enumeration was performed.
+No existing project files were modified.
+============================================================================

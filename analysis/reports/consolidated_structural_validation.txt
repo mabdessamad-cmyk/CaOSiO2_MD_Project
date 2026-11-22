@@ -1,0 +1,30 @@
+x=0.10: atoms=6496, Si=2016, O=4256, Ca=224, density=2.622000 g/cm3
+x=0.20: atoms=6720, Si=1920, O=4320, Ca=480, density=2.678959 g/cm3
+x=0.30: atoms=6480, Si=1680, O=4080, Ca=720, density=2.737483 g/cm3
+x=0.40: atoms=6760, Si=1560, O=4160, Ca=1040, density=2.801070 g/cm3
+
+STRUCTURAL VALIDATION
+All structural consistency checks passed.
+Qn distributions are normalized over SiIV sites.
+SiV sites are reported separately from SiIV/Qn.
+Oxygen populations are BO, NBO, and other.
+Ca-O environment values are contact counts.
+
+PERIODIC RING VALIDATION
+Existing periodic_ring_counts.csv was read without modification.
+All ring-size counts and classifications passed consistency checks.
+Ring statistics refer to oxygen-labelled primitive ring paths.
+No ring enumeration was performed by this script.
+
+INPUT FILE SHA256
+simulations/data/x010_glass_final_300K.data: e32314c5f471defce182a371a0297e5844ced99751344f68dec75aff0747074c
+simulations/data/x020_glass_final_300K.data: e099ca411fb63faae453bbc7c700fd20aef8d67f23ecae699963fc393e3133aa
+simulations/data/glass_final_300K.data: 3a0e8d48f1153f59306412879d9f01143bf5265c93359e26f0af4741636ae785
+simulations/data/x040_glass_final_300K.data: 7e75356b40149b7624fae0a4c1de8f1183aa3f60a93301bc7a8b0abfefc8b7e3
+analysis/reports/periodic_ring_counts.csv: b249f23e783705c7e3a3016a291e42af922169b47037e9fb8e17a68467c28e4b
+
+COMPOSITION SUMMARY
+x=0.10: atoms=6496, Si=2016, O=4256, Ca=224, density=2.622000 g/cm3
+x=0.20: atoms=6720, Si=1920, O=4320, Ca=480, density=2.678959 g/cm3
+x=0.30: atoms=6480, Si=1680, O=4080, Ca=720, density=2.737483 g/cm3
+x=0.40: atoms=6760, Si=1560, O=4160, Ca=1040, density=2.801070 g/cm3

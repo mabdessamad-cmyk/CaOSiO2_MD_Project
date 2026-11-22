@@ -1,0 +1,57 @@
+CaO-SiO2 CONSOLIDATED STRUCTURAL RESULTS V2
+=======================================================
+
+PURPOSE
+Versioned extension of the existing consolidated structural results.
+
+No molecular dynamics simulations were performed.
+No coordination analysis was recalculated.
+No ring enumeration was performed.
+Existing source files were read without modification.
+
+SiV CLASSIFICATION
+-------------------------------------------------------
+BO4_NBO1: BO=4, NBO=1, other=0
+BO5_NBO0: BO=5, NBO=0, other=0
+BO3_NBO2: BO=3, NBO=2, other=0
+UNCLASSIFIED: any remaining five-coordinate pattern
+
+VALIDATED SiV POPULATIONS
+-------------------------------------------------------
+x_CaO  BO4_NBO1  BO5_NBO0  BO3_NBO2  Unclassified  Total
+0.10           1         7         0             0      8
+0.20           1        10         0             0     11
+0.30           3         2         0             0      5
+0.40           2         3         2             0      7
+
+TOTAL          7        22         2             0     31
+
+VALIDATION
+-------------------------------------------------------
+All four compositions were checked.
+Every SiV site has five classified oxygen neighbors.
+Original BO4_NBO1 counts were preserved.
+Original BO5_NBO0 counts were preserved.
+BO3_NBO2 sites were identified from site-level ligand counts.
+Unclassified sites were retained as a separate category.
+All subtype populations sum to the structural SiV_count.
+
+SOFTWARE ENVIRONMENT
+-------------------------------------------------------
+Python: 3.12.3
+Platform: Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39
+
+INPUT FILE SHA256
+-------------------------------------------------------
+analysis/reports/consolidated_structural_results.csv: 348401a7e2f20be378c3776e0b47d79be771b2167ad702c8e4f53bf5a5d526fb
+analysis/reports/siv_geometry_sites.csv: 51edb4d9aefd36aba3c09c1445447f85944319f18e952d81bb1e04101dc4113d
+analysis/reports/periodic_ring_counts.csv: b249f23e783705c7e3a3016a291e42af922169b47037e9fb8e17a68467c28e4b
+simulations/data/x010_glass_final_300K.data: e32314c5f471defce182a371a0297e5844ced99751344f68dec75aff0747074c
+simulations/data/x020_glass_final_300K.data: e099ca411fb63faae453bbc7c700fd20aef8d67f23ecae699963fc393e3133aa
+simulations/data/glass_final_300K.data: 3a0e8d48f1153f59306412879d9f01143bf5265c93359e26f0af4741636ae785
+simulations/data/x040_glass_final_300K.data: 7e75356b40149b7624fae0a4c1de8f1183aa3f60a93301bc7a8b0abfefc8b7e3
+workflow/extract_consolidated_results.py: 7db4f6b110162bfce737f4446e446d9441cf33f9c056ba70cd86c8a04da2b89f
+analysis/scripts/structural/analyze_siv_geometry.py: 5d5bcce7237073627e24ab490bc1e275680f177f07d36d1c94a44b87bc3084e0
+workflow/create_consolidated_structural_results_v2.py: 0185a7870e0098795436e4a1d34b32024c5e051af25a63b6765cdc120f4a40c4
+
+END OF VALIDATION REPORT

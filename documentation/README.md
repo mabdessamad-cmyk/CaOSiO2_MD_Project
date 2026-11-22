@@ -1,4 +1,5 @@
 # CaO–SiO₂ Glass Molecular Dynamics and Structural Analysis
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23260919.svg)](https://doi.org/10.5281/zenodo.23260919)
 
 ## Project
 
