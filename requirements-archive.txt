@@ -4,3 +4,5 @@ matplotlib==3.6.3
 
 # Required to execute the workflow regression tests
 pytest==7.4.4
+
+scipy==1.11.4
