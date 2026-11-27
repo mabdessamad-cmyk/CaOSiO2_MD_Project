@@ -1,5 +1,5 @@
 # CaO–SiO₂ Glass Molecular Dynamics and Structural Analysis
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23260919.svg)](https://doi.org/10.5281/zenodo.23260919)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23260918.svg)](https://doi.org/10.5281/zenodo.23260918)
 
 ## Project
 
@@ -139,8 +139,7 @@ The manuscript associated with this repository provides the complete methodologi
 
 The simulation inputs, atomic configurations, structural-analysis scripts, partial radial distribution functions, figures, tables, and consolidated structural reports are provided in this repository.
 
-The repository will be archived through Zenodo upon public release, and the resulting persistent DOI will be added to this section and to the associated manuscript.
-
+The repository is archived on Zenodo. The [concept DOI](https://doi.org/10.5281/zenodo.23260918) resolves to the record for all versions, while the [v1.1.0 version DOI](https://doi.org/10.5281/zenodo.24478109) identifies the specific archived release published on 23 November 2026. The version-specific DOI should be cited when referring to the exact release used.
 
 ## License
 
